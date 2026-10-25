@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Developer Tool</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- AUTH PAGES -->
+  <div id="authPage" class="auth-page">
+    <div class="auth-container">
+      <div class="auth-brand">
+        <div class="brand-icon">⚡</div>
+        <h1 class="brand-name">Smart<span>Dev</span>Tool</h1>
+        <p class="brand-tagline">API Integration Platform</p>
+      </div>
+
+      <!-- Login Form -->
+      <div id="loginForm" class="auth-card">
+        <h2 class="auth-title">Welcome back</h2>
+        <p class="auth-subtitle">Sign in to your workspace</p>
+        <div id="loginAlert" class="alert d-none" role="alert"></div>
+        <form id="loginFormEl" novalidate>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" id="loginEmail" class="form-control" placeholder="you@example.com" required />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" id="loginPassword" class="form-control" placeholder="Your password" required />
+              <button type="button" class="btn btn-outline-secondary toggle-pass" data-target="loginPassword">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 btn-lg mt-2" id="loginBtn">
+            <span class="btn-text">Sign In</span>
+            <span class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
+          </button>
+        </form>
+        <p class="auth-switch mt-3">Don't have an account? <a href="#" id="showRegister">Create one</a></p>
+      </div>
+
+      <!-- Register Form -->
+      <div id="registerForm" class="auth-card d-none">
+        <h2 class="auth-title">Create account</h2>
+        <p class="auth-subtitle">Start building your API workspace</p>
+        <div id="registerAlert" class="alert d-none" role="alert"></div>
+        <form id="registerFormEl" novalidate>
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input type="text" id="regUsername" class="form-control" placeholder="devuser" required />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" id="regEmail" class="form-control" placeholder="you@example.com" required />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" id="regPassword" class="form-control" placeholder="Min 6 characters" required />
+              <button type="button" class="btn btn-outline-secondary toggle-pass" data-target="regPassword">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 btn-lg mt-2" id="registerBtn">
+            <span class="btn-text">Create Account</span>
+            <span class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
+          </button>
+        </form>
+        <p class="auth-switch mt-3">Already have an account? <a href="#" id="showLogin">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="appPage" class="app-page d-none">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-small">
+          <span class="brand-icon-sm">⚡</span>
+          <span class="brand-name-sm">SmartDevTool</span>
+        </div>
+        <button class="btn btn-link sidebar-toggle-btn d-md-none" id="sidebarToggle">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-view="builder">
+          <i class="bi bi-lightning-charge"></i>
+          <span>Request Builder</span>
+        </a>
+        <a href="#" class="nav-item" data-view="collections">
+          <i class="bi bi-collection"></i>
+          <span>Collections</span>
+        </a>
+        <a href="#" class="nav-item" data-view="history">
+          <i class="bi bi-clock-history"></i>
+          <span>History</span>
+        </a>
+        <a href="#" class="nav-item" data-view="dashboard">
+          <i class="bi bi-grid-1x2"></i>
+          <span>Dashboard</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-collections mt-3">
+        <div class="sidebar-section-title d-flex justify-content-between align-items-center px-3 mb-1">
+          <span class="text-muted small text-uppercase fw-semibold">Collections</span>
+          <button class="btn btn-link p-0 text-muted" id="newCollectionSidebarBtn" title="New Collection">
+            <i class="bi bi-plus-lg"></i>
+          </button>
+        </div>
+        <div id="sidebarCollectionsList"></div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-info" id="userInfo">
+          <div class="user-avatar" id="userAvatar"></div>
+          <div class="user-details">
+            <div class="user-name" id="userName"></div>
+            <div class="user-email" id="userEmail"></div>
+          </div>
+        </div>
+        <div class="sidebar-actions">
+          <button class="btn btn-link text-muted p-1" id="themeToggle" title="Toggle Theme">
+            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+          </button>
+          <button class="btn btn-link text-muted p-1" id="logoutBtn" title="Logout">
+            <i class="bi bi-box-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="btn btn-link text-muted me-2 d-md-none" id="mobileSidebarToggle">
+            <i class="bi bi-list fs-4"></i>
+          </button>
+          <h4 class="topbar-title" id="pageTitle">Request Builder</h4>
+        </div>
+        <div class="topbar-right">
+          <span class="badge bg-success d-flex align-items-center gap-1" id="dbStatusBadge">
+            <i class="bi bi-circle-fill" style="font-size:8px"></i> Connected
+          </span>
+        </div>
+      </header>
+
+      <!-- VIEWS -->
+
+      <!-- REQUEST BUILDER VIEW -->
+      <div class="view active" id="builderView">
+        <div class="builder-layout">
+
+          <!-- Saved Requests Panel -->
+          <div class="saved-panel" id="savedPanel">
+            <div class="saved-panel-header">
+              <span class="fw-semibold">Saved Requests</span>
+              <button class="btn btn-sm btn-primary" id="newRequestBtn">
+                <i class="bi bi-plus"></i> New
+              </button>
+            </div>
+            <div class="saved-search-box">
+              <i class="bi bi-search text-muted"></i>
+              <input type="text" id="savedSearch" placeholder="Search requests..." class="form-control form-control-sm border-0 bg-transparent" />
+            </div>
+            <div id="savedRequestsList" class="saved-requests-list"></div>
+          </div>
+
+          <!-- Request Editor -->
+          <div class="request-editor">
+
+            <!-- URL Bar -->
+            <div class="url-bar">
+              <select id="methodSelect" class="method-select">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="PATCH">PATCH</option>
+                <option value="DELETE">DELETE</option>
+              </select>
+              <input type="text" id="urlInput" class="url-input form-control" placeholder="https://api.example.com/endpoint" />
+              <button class="btn btn-primary btn-send" id="sendBtn">
+                <i class="bi bi-send-fill"></i> Send
+              </button>
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" id="saveDropdown" data-bs-toggle="dropdown">
+                  <i class="bi bi-save"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#" id="saveRequestBtn"><i class="bi bi-save me-2"></i>Save Request</a></li>
+                  <li><a class="dropdown-item" href="#" id="saveAsBtn"><i class="bi bi-save2 me-2"></i>Save As New</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#" id="copyCurlBtn"><i class="bi bi-terminal me-2"></i>Copy as cURL</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Request Name Bar -->
+            <div class="request-name-bar d-flex align-items-center gap-2 px-1 py-1">
+              <input type="text" id="requestName" class="form-control form-control-sm" placeholder="Request name..." />
+              <select id="requestCollection" class="form-select form-select-sm" style="max-width:200px">
+                <option value="">No collection</option>
+              </select>
+            </div>
+
+            <!-- Request Tabs -->
+            <div class="request-tabs">
+              <ul class="nav nav-tabs" id="requestTabs">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#" data-tab="params">Params <span class="badge bg-secondary ms-1 tab-count" id="paramsCount">0</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" data-tab="headers">Headers <span class="badge bg-secondary ms-1 tab-count" id="headersCount">0</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" data-tab="auth">Auth</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" data-tab="body">Body</a>
+                </li>
+              </ul>
+
+              <!-- Params Tab -->
+              <div class="tab-pane active" id="paramsTab">
+                <div class="kv-table">
+                  <div class="kv-header">
+                    <span></span><span>Key</span><span>Value</span><span></span>
+                  </div>
+                  <div id="paramsRows"></div>
+                  <button class="btn btn-sm btn-link add-row-btn" data-type="params">
+                    <i class="bi bi-plus"></i> Add Parameter
+                  </button>
+                </div>
+              </div>
+
+              <!-- Headers Tab -->
+              <div class="tab-pane" id="headersTab">
+                <div class="kv-table">
+                  <div class="kv-header">
+                    <span></span><span>Key</span><span>Value</span><span></span>
+                  </div>
+                  <div id="headersRows"></div>
+                  <button class="btn btn-sm btn-link add-row-btn" data-type="headers">
+                    <i class="bi bi-plus"></i> Add Header
+                  </button>
+                </div>
+              </div>
+
+              <!-- Auth Tab -->
+              <div class="tab-pane" id="authTab">
+                <div class="auth-section">
+                  <div class="mb-3">
+                    <label class="form-label fw-semibold">Auth Type</label>
+                    <select id="authType" class="form-select form-select-sm" style="max-width: 200px">
+                      <option value="none">No Auth</option>
+                      <option value="apiKey">API Key</option>
+                      <option value="bearer">Bearer Token</option>
+                      <option value="basic">Basic Auth</option>
+                    </select>
+                  </div>
+
+                  <div id="authNone" class="auth-detail">
+                    <p class="text-muted small">This request does not use any authorization.</p>
+                  </div>
+
+                  <div id="authApiKey" class="auth-detail d-none">
+                    <div class="row g-2">
+                      <div class="col-md-4">
+                        <label class="form-label small">Header Name</label>
+                        <input type="text" id="apiKeyHeader" class="form-control form-control-sm" placeholder="X-API-Key" value="X-API-Key" />
+                      </div>
+                      <div class="col-md-8">
+                        <label class="form-label small">API Key</label>
+                        <input type="text" id="apiKeyValue" class="form-control form-control-sm" placeholder="your-api-key-here" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="authBearer" class="auth-detail d-none">
+                    <label class="form-label small">Bearer Token</label>
+                    <input type="text" id="bearerToken" class="form-control form-control-sm" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." />
+                  </div>
+
+                  <div id="authBasic" class="auth-detail d-none">
+                    <div class="row g-2">
+                      <div class="col-md-6">
+                        <label class="form-label small">Username</label>
+                        <input type="text" id="basicUsername" class="form-control form-control-sm" placeholder="username" />
+                      </div>
+                      <div class="col-md-6">
+                        <label class="form-label small">Password</label>
+                        <input type="password" id="basicPassword" class="form-control form-control-sm" placeholder="password" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Body Tab -->
+              <div class="tab-pane" id="bodyTab">
+                <div class="body-section">
+                  <div class="d-flex gap-3 mb-3 align-items-center">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="bodyType" id="bodyNone" value="none" checked />
+                      <label class="form-check-label small" for="bodyNone">None</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="bodyType" id="bodyJson" value="json" />
+                      <label class="form-check-label small" for="bodyJson">JSON</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="bodyType" id="bodyText" value="text" />
+                      <label class="form-check-label small" for="bodyText">Text</label>
+                    </div>
+                    <button class="btn btn-sm btn-link ms-auto text-muted p-0" id="formatJsonBtn" title="Format JSON">
+                      <i class="bi bi-braces"></i> Format
+                    </button>
+                  </div>
+                  <div id="bodyEditor" class="d-none">
+                    <textarea id="bodyContent" class="body-editor form-control font-monospace" rows="10" placeholder='{"key": "value"}'></textarea>
+                  </div>
+                  <div id="bodyNoneMsg">
+                    <p class="text-muted small text-center mt-3">This request has no body.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Response Panel -->
+            <div class="response-panel" id="responsePanel">
+              <div class="response-header">
+                <span class="fw-semibold">Response</span>
+                <div class="response-meta d-flex gap-3 align-items-center" id="responseMeta" style="display:none!important">
+                  <span class="badge" id="statusBadge"></span>
+                  <span class="text-muted small"><i class="bi bi-clock me-1"></i><span id="responseTime">-</span> ms</span>
+                  <span class="text-muted small"><i class="bi bi-hdd me-1"></i><span id="responseSize">-</span> B</span>
+                </div>
+                <div class="ms-auto d-flex gap-2">
+                  <button class="btn btn-sm btn-link text-muted" id="copyResponseBtn" title="Copy Response" style="display:none">
+                    <i class="bi bi-clipboard"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div id="responseEmpty" class="response-empty">
+                <div class="empty-state">
+                  <i class="bi bi-send fs-1 text-muted"></i>
+                  <p class="text-muted mt-2">Send a request to see the response here</p>
+                </div>
+              </div>
+
+              <div id="responseLoading" class="response-loading d-none">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="text-muted mt-2">Sending request...</p>
+              </div>
+
+              <div id="responseContent" class="d-none">
+                <ul class="nav nav-tabs response-tabs" id="responseTabs">
+                  <li class="nav-item"><a class="nav-link active" href="#" data-rtab="body">Body</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#" data-rtab="headers">Headers</a></li>
+                </ul>
+                <div id="responseBodyPanel">
+                  <pre id="responseBody" class="response-body"></pre>
+                </div>
+                <div id="responseHeadersPanel" class="d-none">
+                  <div id="responseHeaders" class="response-headers-table"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLLECTIONS VIEW -->
+      <div class="view d-none" id="collectionsView">
+        <div class="view-header">
+          <h5 class="mb-0">My Collections</h5>
+          <button class="btn btn-primary btn-sm" id="newCollectionBtn">
+            <i class="bi bi-plus-lg me-1"></i>New Collection
+          </button>
+        </div>
+        <div id="collectionsGrid" class="collections-grid"></div>
+      </div>
+
+      <!-- HISTORY VIEW -->
+      <div class="view d-none" id="historyView">
+        <div class="view-header">
+          <h5 class="mb-0">Request History</h5>
+          <button class="btn btn-outline-danger btn-sm" id="clearHistoryBtn">
+            <i class="bi bi-trash me-1"></i>Clear All
+          </button>
+        </div>
+        <div class="history-filters mb-3 d-flex gap-2 flex-wrap">
+          <div class="input-group input-group-sm" style="max-width:300px">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <input type="text" id="historySearch" class="form-control" placeholder="Search URL..." />
+          </div>
+          <select id="historyMethodFilter" class="form-select form-select-sm" style="max-width:120px">
+            <option value="ALL">All Methods</option>
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="PATCH">PATCH</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+        </div>
+        <div id="historyList" class="history-list"></div>
+        <div id="historyPagination" class="d-flex justify-content-center mt-3"></div>
+      </div>
+
+      <!-- DASHBOARD VIEW -->
+      <div class="view d-none" id="dashboardView">
+        <div class="view-header">
+          <h5 class="mb-0">Dashboard</h5>
+        </div>
+        <div class="row g-3 mb-4" id="statsCards"></div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-header fw-semibold">Recent Collections</div>
+              <div class="card-body p-0" id="dashRecentCollections"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-header fw-semibold">Recent Requests</div>
+              <div class="card-body p-0" id="dashRecentRequests"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MODALS -->
+
+  <!-- Save Request Modal -->
+  <div class="modal fade" id="saveRequestModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="saveModalTitle">Save Request</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="saveModalAlert" class="alert d-none"></div>
+          <div class="mb-3">
+            <label class="form-label">Request Name *</label>
+            <input type="text" id="saveRequestName" class="form-control" placeholder="My API Request" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Collection</label>
+            <select id="saveRequestCollection" class="form-select">
+              <option value="">No collection</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="confirmSaveBtn">
+            <span class="btn-text">Save</span>
+            <span class="spinner-border spinner-border-sm d-none ms-2"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Collection Modal -->
+  <div class="modal fade" id="collectionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="collectionModalTitle">New Collection</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="collectionModalAlert" class="alert d-none"></div>
+          <div class="mb-3">
+            <label class="form-label">Collection Name *</label>
+            <input type="text" id="collectionName" class="form-control" placeholder="My API Collection" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea id="collectionDesc" class="form-control" rows="2" placeholder="Optional description..."></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Color</label>
+            <div class="color-picker d-flex gap-2 flex-wrap">
+              <span class="color-dot selected" data-color="#6366f1" style="background:#6366f1"></span>
+              <span class="color-dot" data-color="#3b82f6" style="background:#3b82f6"></span>
+              <span class="color-dot" data-color="#10b981" style="background:#10b981"></span>
+              <span class="color-dot" data-color="#f59e0b" style="background:#f59e0b"></span>
+              <span class="color-dot" data-color="#ef4444" style="background:#ef4444"></span>
+              <span class="color-dot" data-color="#8b5cf6" style="background:#8b5cf6"></span>
+              <span class="color-dot" data-color="#ec4899" style="background:#ec4899"></span>
+              <span class="color-dot" data-color="#06b6d4" style="background:#06b6d4"></span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="confirmCollectionBtn">
+            <span class="btn-text">Create</span>
+            <span class="spinner-border spinner-border-sm d-none ms-2"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Delete Modal -->
+  <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title text-danger"><i class="bi bi-trash me-2"></i>Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p id="deleteConfirmText">Are you sure you want to delete this?</p>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger btn-sm" id="confirmDeleteBtn">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- cURL Modal -->
+  <div class="modal fade" id="curlModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-terminal me-2"></i>cURL Command</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <pre id="curlCommand" class="curl-command"></pre>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="copyCurlModalBtn">
+            <i class="bi bi-clipboard me-1"></i> Copy
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:9999">
+    <div id="appToast" class="toast align-items-center border-0" role="alert">
+      <div class="d-flex">
+        <div class="toast-body" id="toastBody"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay d-none" id="sidebarOverlay"></div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
